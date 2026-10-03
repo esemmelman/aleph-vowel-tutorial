@@ -25,6 +25,8 @@ const consonants = [
   ['Taf', 'תּ'], ['Saf', 'ת'],
 ].map(([name, glyph]) => ({name, glyph}));
 const allVowels = vowels.map((_, i) => i);
+const alefGroups = [[0, 1, 2], [3, 4], allVowels.filter(i => i >= 5)];
+const alefHeadings = ['Patach · Kamatz · Chirik', 'Tzairai · Kubutz', 'Remaining vowel signs'];
 const key = 'hebrew-practice-v4';
 let state = {count: 8, hints: false, consonant: 0, rows: []};
 try {
@@ -53,6 +55,10 @@ function save() { try { localStorage.setItem(key, JSON.stringify(state)); } catc
   document.querySelector('#feedback').textContent = 'Browser storage is unavailable. You can still practice here.';
 } }
 function render() {
+  document.querySelectorAll('.line-heading h3').forEach((heading, i) => {
+    heading.replaceChildren(heading.querySelector('span'), document.createTextNode(
+      ' ' + (state.consonant === 0 ? alefHeadings[i] : 'All vowel signs')));
+  });
   state.rows.forEach((row,i) => {
     const container = document.querySelector(`#row-${i}`);
     container.replaceChildren();
@@ -79,13 +85,14 @@ function render() {
   save();
 }
 function freshRows() {
+  if (state.consonant === 0) return alefGroups.map(group => randomRow(group));
   // Deal a balanced shuffled pool across all three lines so every vowel appears.
   const dealt = randomRow(allVowels, state.count * 3);
   return [0, 1, 2].map(i => dealt.slice(i * state.count, (i + 1) * state.count));
 }
 function shuffle(line) {
   if (line === undefined) state.rows = freshRows();
-  else state.rows[line] = randomRow(allVowels);
+  else state.rows[line] = randomRow(state.consonant === 0 ? alefGroups[line] : allVowels);
   document.querySelector('#feedback').textContent = 'Fresh practice ready. Start at the right of each line.';
   render();
 }
@@ -117,5 +124,6 @@ vowels.forEach(v => {
   const sound = document.createElement('p'); sound.textContent = `“${v.sound}” · ${v.example}`;
   card.append(glyph,name,sound); document.querySelector('#vowel-guide').append(card);
 });
-if (!state.rows.length) state.rows = freshRows();
+if (!state.rows.length || (state.consonant === 0 && state.rows.some((row, i) =>
+  row.some(v => !alefGroups[i].includes(v))))) state.rows = freshRows();
 render();
