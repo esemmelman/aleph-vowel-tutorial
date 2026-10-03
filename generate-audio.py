@@ -10,7 +10,7 @@ folder=Path('audio'); folder.mkdir(exist_ok=True)
 manifest={}
 semaphore=asyncio.Semaphore(6)
 def clip_path(i,j):
-    suffix = ("-hila" if i in {0, 17} else "-hebrew") if j == 8 else ""
+    suffix = ("-hebrew" if i == 1 else "-syllable") if j == 8 else ""
     return folder/f'{i}-{j}{suffix}.mp3'
 async def generate(i,j,text):
     path=clip_path(i,j)
@@ -26,7 +26,7 @@ async def generate(i,j,text):
 async def main():
     import runpy
     sheva = runpy.run_path(str(Path(__file__).with_name('generate-sheva.py')))
-    await sheva['generate']()
+    sheva['generate']()
     jobs=[]
     for i,letter in enumerate(letters):
         for j in sorted(set(groups) - {8}):
