@@ -12,7 +12,7 @@ const vowels = [
   {name: 'Hataf Patach', mark: '\u05b2', sound: 'short ah', example: 'a reduced vowel, as in father'},
   {name: 'Hataf Segol', mark: '\u05b1', sound: 'short eh', example: 'a reduced vowel, as in bed'},
   {name: 'Hataf Kamatz', mark: '\u05b3', sound: 'short oh', example: 'a reduced vowel, as in go'},
-  {name: 'Kamatz Katan', mark: '\u05c7', sound: 'oh', example: 'as in go; often printed like ordinary Kamatz'},
+  {name: 'Holam Haser', mark: '\u05b9', sound: 'oh', example: 'as in go; a dot above the top left of the letter'},
 ];
 const firstGroups = [[0, 1, 2], [3, 4]];
 const groups = [...firstGroups, vowels.map((_, i) => i).filter(i => !firstGroups.flat().includes(i))];
