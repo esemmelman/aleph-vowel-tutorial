@@ -14,29 +14,32 @@ const vowels = [
   {name: 'Hataf Kamatz', mark: '\u05b3', sound: 'short oh', example: 'a reduced vowel, as in go'},
   {name: 'Holam Haser', mark: '\u05b9', sound: 'oh', example: 'as in go; a dot above the top left of the letter'},
 ];
-const firstGroups = [[0, 1, 2], [3, 4]];
-const groups = [...firstGroups, vowels.map((_, i) => i).filter(i => !firstGroups.flat().includes(i))];
-const key = 'aleph-practice-v1';
-let state = {count: 12, hints: false, rows: []};
+const consonants = [
+  ['Bet', 'ב'], ['Gimel', 'ג'], ['Dalet', 'ד'], ['He', 'ה'],
+  ['Vav', 'ו'], ['Zayin', 'ז'], ['Chet', 'ח'], ['Tet', 'ט'],
+  ['Yod', 'י'], ['Kaf', 'כ'], ['Lamed', 'ל'], ['Mem', 'מ'],
+  ['Nun', 'נ'], ['Samekh', 'ס'], ['Ayin', 'ע'], ['Pe', 'פ'],
+  ['Tsadi', 'צ'], ['Qof', 'ק'], ['Resh', 'ר'], ['Shin', 'ש'], ['Taf', 'ת'],
+].map(([name, glyph]) => ({name, glyph}));
+const allVowels = vowels.map((_, i) => i);
+const key = 'hebrew-practice-v2';
+let state = {count: 8, hints: false, consonant: 0, rows: []};
 try {
   const saved = JSON.parse(localStorage.getItem(key));
-  if (saved && [6,12,18].includes(saved.count) && typeof saved.hints === 'boolean' &&
-      Array.isArray(saved.rows) && [2, groups.length].includes(saved.rows.length) && saved.rows.slice(0, 2).every((row,i) =>
-        Array.isArray(row) && row.length === saved.count && row.every(v => groups[i].includes(v)))) {
+  if (saved && [6,8,12,18].includes(saved.count) && typeof saved.hints === 'boolean' &&
+      Number.isInteger(saved.consonant) && consonants[saved.consonant] &&
+      Array.isArray(saved.rows) && saved.rows.length === 3 && saved.rows.every(row =>
+        Array.isArray(row) && row.length === saved.count && row.every(v => allVowels.includes(v)))) {
     state = saved;
-    const thirdRow = state.rows[2];
-    if (!Array.isArray(thirdRow) || thirdRow.length !== state.count || !thirdRow.every(v => groups[2].includes(v))) {
-      state.rows = state.rows.slice(0, 2);
-    }
   }
 } catch { /* Storage may be unavailable; practice still works. */ }
-function randomRow(group) {
+function randomRow(group, count = state.count) {
   const shuffledGroup = [...group];
   for (let i = shuffledGroup.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffledGroup[i], shuffledGroup[j]] = [shuffledGroup[j], shuffledGroup[i]];
   }
-  const row = Array.from({length: state.count}, (_,i) => shuffledGroup[i % shuffledGroup.length]);
+  const row = Array.from({length: count}, (_,i) => shuffledGroup[i % shuffledGroup.length]);
   for (let i = row.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [row[i],row[j]] = [row[j],row[i]];
@@ -54,9 +57,9 @@ function render() {
       const v = vowels[index];
       const button = document.createElement('button');
       button.className = 'letter';
-      button.setAttribute('aria-label', `Aleph with ${v.name}. Select to reveal the sound.`);
+      button.setAttribute('aria-label', `${consonants[state.consonant].name} with ${v.name}. Select to reveal the sound.`);
       const glyph = document.createElement('span');
-      glyph.className = 'glyph'; glyph.textContent = '\u05d0' + v.mark;
+      glyph.className = 'glyph'; glyph.textContent = consonants[state.consonant].glyph + v.mark;
       button.append(glyph);
       if (state.hints) {
         const hint = document.createElement('span'); hint.className = 'hint';
@@ -72,12 +75,31 @@ function render() {
   });
   save();
 }
+function freshRows() {
+  // Deal a balanced shuffled pool across all three lines so every vowel appears.
+  const dealt = randomRow(allVowels, state.count * 3);
+  return [0, 1, 2].map(i => dealt.slice(i * state.count, (i + 1) * state.count));
+}
 function shuffle(line) {
-  if (line === undefined) state.rows = groups.map(randomRow);
-  else state.rows[line] = randomRow(groups[line]);
+  if (line === undefined) state.rows = freshRows();
+  else state.rows[line] = randomRow(allVowels);
   document.querySelector('#feedback').textContent = 'Fresh practice ready. Start at the right of each line.';
   render();
 }
+const picker = document.querySelector('#consonant');
+consonants.forEach((letter, i) => {
+  const option = document.createElement('option');
+  option.value = i;
+  option.textContent = `${letter.glyph} · ${letter.name}`;
+  picker.append(option);
+});
+picker.value = state.consonant;
+picker.addEventListener('change', e => {
+  state.consonant = Number(e.target.value);
+  state.count = 8;
+  document.querySelector('#count').value = 8;
+  shuffle();
+});
 document.querySelector('#count').value = state.count;
 document.querySelector('#hints').checked = state.hints;
 document.querySelector('#count').addEventListener('change', e => {state.count = Number(e.target.value); shuffle();});
@@ -91,6 +113,5 @@ vowels.forEach(v => {
   const sound = document.createElement('p'); sound.textContent = `“${v.sound}” · ${v.example}`;
   card.append(glyph,name,sound); document.querySelector('#vowel-guide').append(card);
 });
-if (!state.rows.length) state.rows = groups.map(randomRow);
-while (state.rows.length < groups.length) state.rows.push(randomRow(groups[state.rows.length]));
+if (!state.rows.length) state.rows = freshRows();
 render();

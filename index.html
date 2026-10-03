@@ -4,20 +4,25 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#174c43">
-  <title>Aleph · Hebrew vowel practice</title>
+  <title>Hebrew letter · vowel practice</title>
   <link rel="stylesheet" href="style.css">
   <script src="app.js" defer></script>
 </head>
 <body>
   <main>
-    <section class="practice" aria-label="Aleph reading practice">
+    <div class="practice-layout">
+    <aside class="letter-picker"><label for="consonant">Choose a letter</label><select id="consonant" size="21" aria-label="Hebrew letters from Bet through Taf"></select></aside>
+    <section class="practice" aria-label="Hebrew reading practice">
+      <div class="sticky-controls">
       <div class="toolbar"><button id="shuffle">↻ Shuffle all three lines</button></div>
-      <div class="options"><label>Letters per line <select id="count"><option>6</option><option selected>12</option><option>18</option></select></label><label><input id="hints" type="checkbox"> Show vowel names</label></div>
-      <section class="line"><div class="line-heading"><h3><span>01</span> Patach · Kamatz · Chirik</h3><button class="quiet" data-shuffle="0">Shuffle line 1</button></div><div id="row-0" class="letters" dir="rtl" lang="he"></div></section>
-      <section class="line"><div class="line-heading"><h3><span>02</span> Tzairai · Kubutz</h3><button class="quiet" data-shuffle="1">Shuffle line 2</button></div><div id="row-1" class="letters" dir="rtl" lang="he"></div></section>
-      <section class="line"><div class="line-heading"><h3><span>03</span> Remaining vowel signs</h3><button class="quiet" data-shuffle="2">Shuffle line 3</button></div><div id="row-2" class="letters" dir="rtl" lang="he"></div></section>
+      <div class="options"><label>Letters per line <select id="count"><option>6</option><option selected>8</option><option>12</option><option>18</option></select></label><label><input id="hints" type="checkbox"> Show vowel names</label></div>
+      </div>
+      <section class="line"><div class="line-heading"><h3><span>01</span> All vowel signs</h3><button class="quiet" data-shuffle="0">Shuffle line 1</button></div><div id="row-0" class="letters" dir="rtl" lang="he"></div></section>
+      <section class="line"><div class="line-heading"><h3><span>02</span> All vowel signs</h3><button class="quiet" data-shuffle="1">Shuffle line 2</button></div><div id="row-1" class="letters" dir="rtl" lang="he"></div></section>
+      <section class="line"><div class="line-heading"><h3><span>03</span> All vowel signs</h3><button class="quiet" data-shuffle="2">Shuffle line 3</button></div><div id="row-2" class="letters" dir="rtl" lang="he"></div></section>
       <p class="note">Read aloud, then select a letter to check its vowel and sound.</p><p id="feedback" role="status" aria-live="polite">Your practice is saved automatically in this browser.</p>
     </section>
+    </div>
     <section class="guide" aria-labelledby="guide-title"><span class="eyebrow">A SMALL GUIDE</span><h2 id="guide-title">The marks make the sound.</h2><div id="vowel-guide" class="guide-grid"></div><p class="note">Tzairai (Tsere) is often taught as “ay”; in modern Israeli Hebrew it is usually “eh.” Here Kamatz uses the common “ah” sound. Pronunciation varies by reading tradition.</p></section>
     <footer>Practice a little, every day. <a href="https://soundsofnikud.com/index_en.html" target="_blank" rel="noopener noreferrer">Explore Hebrew vowel sounds ↗</a></footer>
   </main>

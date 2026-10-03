@@ -1,13 +1,13 @@
-# Aleph Hebrew vowel practice
+# Hebrew vowel practice
 
-A static, mobile-friendly tutorial with randomized Aleph vowel exercises.
+A static, mobile-friendly tutorial with a left-hand letter list from Bet through Taf.
 
-- Line 1: Patach, Kamatz, Chirik (Cheereek).
-- Line 2: Tzairai (Tsere), Kubutz (three diagonal dots, “oo”).
-- Line 3: Remaining vowel signs: Segol, Holam Male (vav with a dot above it, “oh”), Shuruk, Sheva, Hataf Patach, Hataf Segol, Hataf Kamatz, and Holam Haser (a dot above the top left of the letter, “oh”).
-- Read from right to left. Select a letter to reveal its sound, or enable vowel labels.
-- Each row uses only its own vowels, shuffled into a balanced random order. With 12 or 18 letters, line 3 includes all eight remaining signs; with 6, it practices a random subset.
-- Rows and settings save automatically in browser local storage.
+- Select a letter to generate three randomized lines with eight letters per line.
+- Each fresh set includes all 13 vowel signs, balanced across the three lines.
+- Shuffle all lines or a single line; adjust the letter count or show vowel names.
+- The shuffle and settings controls stay visible while scrolling.
+- Read from right to left and select a practice tile to reveal its vowel sound.
+- The selected letter, rows, and settings save automatically in browser local storage.
 
 Open `index.html` locally or use the GitHub Pages site. No installation or build is needed.
 
