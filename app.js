@@ -6,13 +6,13 @@ const vowels = [
   {name: 'Tzairai (Tsere)', mark: '\u05b5', sound: 'ay / eh', example: 'varies by tradition'},
   {name: 'Kubutz', mark: '\u05bb', sound: 'oo', example: 'as in moon'},
 ];
-const groups = [[0, 1, 2], [3, 4]];
+const groups = [[0, 1, 2], [3, 4], [0, 1, 2, 3, 4]];
 const key = 'aleph-practice-v1';
 let state = {count: 12, hints: false, rows: []};
 try {
   const saved = JSON.parse(localStorage.getItem(key));
   if (saved && [6,12,18].includes(saved.count) && typeof saved.hints === 'boolean' &&
-      Array.isArray(saved.rows) && saved.rows.length === 2 && saved.rows.every((row,i) =>
+      Array.isArray(saved.rows) && [2, groups.length].includes(saved.rows.length) && saved.rows.every((row,i) =>
         Array.isArray(row) && row.length === saved.count && row.every(v => groups[i].includes(v)))) state = saved;
 } catch { /* Storage may be unavailable; practice still works. */ }
 function randomRow(group) {
@@ -72,4 +72,5 @@ vowels.forEach(v => {
   card.append(glyph,name,sound); document.querySelector('#vowel-guide').append(card);
 });
 if (!state.rows.length) state.rows = groups.map(randomRow);
+while (state.rows.length < groups.length) state.rows.push(randomRow(groups[state.rows.length]));
 render();
