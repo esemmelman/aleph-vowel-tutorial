@@ -5,18 +5,38 @@ const vowels = [
   {name: 'Chirik (Cheereek)', mark: '\u05b4', sound: 'ee', example: 'as in see'},
   {name: 'Tzairai (Tsere)', mark: '\u05b5', sound: 'ay / eh', example: 'varies by tradition'},
   {name: 'Kubutz', mark: '\u05bb', sound: 'oo', example: 'as in moon'},
+  {name: 'Segol', mark: '\u05b6', sound: 'eh', example: 'as in bed'},
+  {name: 'Holam', mark: '\u05b9', sound: 'oh', example: 'as in go'},
+  {name: 'Shuruk', mark: '\u05d5\u05bc', sound: 'oo', example: 'as in moon; written with a vav'},
+  {name: 'Sheva', mark: '\u05b0', sound: 'short eh / silent', example: 'depends on the word and reading tradition'},
+  {name: 'Hataf Patach', mark: '\u05b2', sound: 'short ah', example: 'a reduced vowel, as in father'},
+  {name: 'Hataf Segol', mark: '\u05b1', sound: 'short eh', example: 'a reduced vowel, as in bed'},
+  {name: 'Hataf Kamatz', mark: '\u05b3', sound: 'short oh', example: 'a reduced vowel, as in go'},
+  {name: 'Kamatz Katan', mark: '\u05c7', sound: 'oh', example: 'as in go; often printed like ordinary Kamatz'},
 ];
-const groups = [[0, 1, 2], [3, 4], [0, 1, 2, 3, 4]];
+const firstGroups = [[0, 1, 2], [3, 4]];
+const groups = [...firstGroups, vowels.map((_, i) => i).filter(i => !firstGroups.flat().includes(i))];
 const key = 'aleph-practice-v1';
 let state = {count: 12, hints: false, rows: []};
 try {
   const saved = JSON.parse(localStorage.getItem(key));
   if (saved && [6,12,18].includes(saved.count) && typeof saved.hints === 'boolean' &&
-      Array.isArray(saved.rows) && [2, groups.length].includes(saved.rows.length) && saved.rows.every((row,i) =>
-        Array.isArray(row) && row.length === saved.count && row.every(v => groups[i].includes(v)))) state = saved;
+      Array.isArray(saved.rows) && [2, groups.length].includes(saved.rows.length) && saved.rows.slice(0, 2).every((row,i) =>
+        Array.isArray(row) && row.length === saved.count && row.every(v => groups[i].includes(v)))) {
+    state = saved;
+    const thirdRow = state.rows[2];
+    if (!Array.isArray(thirdRow) || thirdRow.length !== state.count || !thirdRow.every(v => groups[2].includes(v))) {
+      state.rows = state.rows.slice(0, 2);
+    }
+  }
 } catch { /* Storage may be unavailable; practice still works. */ }
 function randomRow(group) {
-  const row = Array.from({length: state.count}, (_,i) => group[i % group.length]);
+  const shuffledGroup = [...group];
+  for (let i = shuffledGroup.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledGroup[i], shuffledGroup[j]] = [shuffledGroup[j], shuffledGroup[i]];
+  }
+  const row = Array.from({length: state.count}, (_,i) => shuffledGroup[i % shuffledGroup.length]);
   for (let i = row.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [row[i],row[j]] = [row[j],row[i]];
