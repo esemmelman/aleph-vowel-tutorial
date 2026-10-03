@@ -55,29 +55,23 @@ function save() { try { localStorage.setItem(key, JSON.stringify(state)); } catc
   document.querySelector('#feedback').textContent = 'Browser storage is unavailable. You can still practice here.';
 } }
 let soundEnabled = false;
+let activeAudio = null;
+function stopSound() {
+  if (activeAudio) {
+    activeAudio.pause();
+    activeAudio.currentTime = 0;
+    activeAudio = null;
+  }
+}
 function playSound(text) {
   if (!soundEnabled) return;
-  const feedback = document.querySelector('#feedback');
-  if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
-    feedback.textContent += ' Sound is unavailable in this browser.';
-    return;
-  }
-  const voice = window.speechSynthesis.getVoices().find(v => /^(he|iw)(-|_|$)/i.test(v.lang));
-  if (!voice) {
-    feedback.textContent += ' A Hebrew speech voice is needed to play sound on this device.';
-    return;
-  }
-  window.speechSynthesis.cancel();
-  const utterance = new window.SpeechSynthesisUtterance(text);
-  utterance.voice = voice;
-  utterance.lang = voice.lang;
-  utterance.rate = 0.7;
-  utterance.onerror = event => {
-    if (event.error !== 'canceled' && event.error !== 'interrupted') {
-      feedback.textContent += ' Sound could not be played. Try selecting the letter again.';
-    }
-  };
-  window.speechSynthesis.speak(utterance);
+  stopSound();
+  const clip = new Audio(practiceAudio[text]);
+  activeAudio = clip;
+  clip.play().catch(error => {
+    if (activeAudio !== clip || error.name === 'AbortError') return;
+    document.querySelector('#feedback').textContent += ' Audio could not play. Check your volume and try selecting the letter again.';
+  });
 }
 function render() {
   document.querySelectorAll('.line-heading h3').forEach((heading, i) => {
@@ -143,10 +137,9 @@ const soundCheckbox = document.querySelector('#sound');
 soundCheckbox.checked = false;
 soundCheckbox.addEventListener('change', e => {
   soundEnabled = e.target.checked;
-  if (!soundEnabled && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+  if (!soundEnabled) stopSound();
+  else document.querySelector('#feedback').textContent = 'Sound is on. Select a practice letter to hear it.';
 });
-// Ask for voices early; some browsers populate their voice list asynchronously.
-if ('speechSynthesis' in window) window.speechSynthesis.getVoices();
 document.querySelector('#count').addEventListener('change', e => {state.count = Number(e.target.value); shuffle();});
 document.querySelector('#hints').addEventListener('change', e => {state.hints = e.target.checked; render();});
 document.querySelector('#shuffle').addEventListener('click', () => shuffle());
