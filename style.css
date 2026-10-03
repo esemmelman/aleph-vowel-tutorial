@@ -4,8 +4,8 @@
 /* Keep the letter list at the page edge while centering the practice area. */
 main{max-width:none;padding:32px 16px 28px}
 .practice-layout{grid-template-columns:120px minmax(0,1fr);gap:24px}
-.letter-picker{transform:translateX(8px)}
+.letter-picker{transform:translateX(16px)}
 .practice{width:100%;max-width:1120px;justify-self:center;container-type:inline-size}
 .letter .glyph{font-size:clamp(32px,7.5cqi,72px)}
 .guide,footer{max-width:1120px;margin-left:auto;margin-right:auto}
-@media(max-width:600px){main{padding:16px 4px 28px}.practice-layout{grid-template-columns:64px minmax(0,1fr);gap:8px}.letter-picker{transform:translateX(4px)}.letter-picker label{font-size:11px}.letter .glyph{font-size:clamp(24px,8cqi,40px)}}
+@media(max-width:600px){main{padding:16px 4px 28px}.practice-layout{grid-template-columns:64px minmax(0,1fr);gap:8px}.letter-picker{transform:translateX(6px)}.letter-picker label{font-size:11px}.letter .glyph{font-size:clamp(24px,8cqi,40px)}}

@@ -9,31 +9,26 @@ groups=[0,0,2,3,4,3,6,4,8,0,3,6,6]
 folder=Path('audio'); folder.mkdir(exist_ok=True)
 manifest={}
 semaphore=asyncio.Semaphore(6)
-# Explicit practice syllables keep Sheva audible as "uh" rather than allowing
-# Hebrew speech synthesis to omit an isolated Sheva or pronounce it as "eh".
-sheva_syllables = ['uh', 'buh', 'vuh', 'guh', 'duh', 'huh', 'vuh', 'zuh',
-                   'khuh', 'tuh', 'yuh', 'kuh', 'khuh', 'luh', 'muh', 'nuh',
-                   'suh', 'uh', 'puh', 'fuh', 'tsuh', 'kuh', 'ruh', 'shuh',
-                   'suh', 'tuh', 'suh']
 def clip_path(i,j):
-    return folder/f'{i}-{j}{"-uh" if j == 8 else ""}.mp3'
+    return folder/f'{i}-{j}{"-phonemes" if j == 8 else ""}.mp3'
 async def generate(i,j,text):
     path=clip_path(i,j)
     if path.exists() and path.stat().st_size>0: return
     async with semaphore:
         for attempt in range(4):
             try:
-                voice = 'en-US-AriaNeural' if j == 8 else 'he-IL-HilaNeural'
-                spoken = sheva_syllables[i] if j == 8 else text
-                await edge_tts.Communicate(spoken,voice,rate='-20%').save(str(path))
+                await edge_tts.Communicate(text,'he-IL-HilaNeural',rate='-20%').save(str(path))
                 return
             except Exception:
                 if attempt==3: raise
                 await asyncio.sleep(2*(attempt+1))
 async def main():
+    import runpy
+    sheva = runpy.run_path(str(Path(__file__).with_name('generate-sheva.py')))
+    sheva['generate']()
     jobs=[]
     for i,letter in enumerate(letters):
-        for j in sorted(set(groups)):
+        for j in sorted(set(groups) - {8}):
             jobs.append(generate(i,j,letter+marks[j]))
         for j,group in enumerate(groups):
             manifest[letter+marks[j]]=clip_path(i,group).as_posix()
