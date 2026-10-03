@@ -54,6 +54,31 @@ function randomRow(group, count = state.count) {
 function save() { try { localStorage.setItem(key, JSON.stringify(state)); } catch {
   document.querySelector('#feedback').textContent = 'Browser storage is unavailable. You can still practice here.';
 } }
+let soundEnabled = false;
+function playSound(text) {
+  if (!soundEnabled) return;
+  const feedback = document.querySelector('#feedback');
+  if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+    feedback.textContent += ' Sound is unavailable in this browser.';
+    return;
+  }
+  const voice = window.speechSynthesis.getVoices().find(v => /^(he|iw)(-|_|$)/i.test(v.lang));
+  if (!voice) {
+    feedback.textContent += ' A Hebrew speech voice is needed to play sound on this device.';
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utterance = new window.SpeechSynthesisUtterance(text);
+  utterance.voice = voice;
+  utterance.lang = voice.lang;
+  utterance.rate = 0.7;
+  utterance.onerror = event => {
+    if (event.error !== 'canceled' && event.error !== 'interrupted') {
+      feedback.textContent += ' Sound could not be played. Try selecting the letter again.';
+    }
+  };
+  window.speechSynthesis.speak(utterance);
+}
 function render() {
   document.querySelectorAll('.line-heading h3').forEach((heading, i) => {
     heading.replaceChildren(heading.querySelector('span'), document.createTextNode(
@@ -78,6 +103,7 @@ function render() {
         document.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
         button.classList.add('selected');
         document.querySelector('#feedback').textContent = `${v.name}: “${v.sound}” — ${v.example}.`;
+        playSound(glyph.textContent);
       });
       container.append(button);
     });
@@ -113,6 +139,14 @@ picker.addEventListener('change', e => {
 });
 document.querySelector('#count').value = state.count;
 document.querySelector('#hints').checked = state.hints;
+const soundCheckbox = document.querySelector('#sound');
+soundCheckbox.checked = false;
+soundCheckbox.addEventListener('change', e => {
+  soundEnabled = e.target.checked;
+  if (!soundEnabled && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+});
+// Ask for voices early; some browsers populate their voice list asynchronously.
+if ('speechSynthesis' in window) window.speechSynthesis.getVoices();
 document.querySelector('#count').addEventListener('change', e => {state.count = Number(e.target.value); shuffle();});
 document.querySelector('#hints').addEventListener('change', e => {state.hints = e.target.checked; render();});
 document.querySelector('#shuffle').addEventListener('click', () => shuffle());

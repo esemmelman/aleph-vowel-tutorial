@@ -6,6 +6,7 @@ A static, mobile-friendly tutorial with a far-left letter list from Alef through
 - Select a letter to generate three randomized lines with eight letters per line.
 - Alef uses the original groups: Patach/Kamatz/Chirik on line 1, Tzairai/Kubutz on line 2, and the remaining vowel signs on line 3. Other letters use all 13 vowel signs balanced across the three lines.
 - Shuffle all lines or a single line; adjust the letter count or show vowel names.
+- Check “Include sound” to hear a practice tile when you select it. Sound starts unchecked on each page load and uses a Hebrew speech voice available on your device. Pronunciation depends on that voice; if unavailable, a message appears when you select a tile.
 - The shuffle and settings controls stay visible while scrolling.
 - Read from right to left and select a practice tile to reveal its vowel sound.
 - The selected letter, rows, and settings save automatically in browser local storage.
