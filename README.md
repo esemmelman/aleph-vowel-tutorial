@@ -1,8 +1,8 @@
 # Hebrew vowel practice
 
-A static, mobile-friendly tutorial with a left-hand letter list from Bet through Taf.
+A static, mobile-friendly tutorial with a far-left letter list from Alef through Taf.
 
-- The letter list displays Hebrew glyphs in the same font and size as the practice tiles, including dotted and undotted variants and Shin/Sin.
+- The letter list displays Hebrew glyphs, including dotted and undotted variants and Shin/Sin. Gimel and Dalet appear without dagesh. The center practice letters use a larger responsive font.
 - Select a letter to generate three randomized lines with eight letters per line.
 - Each fresh set includes all 13 vowel signs, balanced across the three lines.
 - Shuffle all lines or a single line; adjust the letter count or show vowel names.

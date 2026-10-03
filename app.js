@@ -15,9 +15,9 @@ const vowels = [
   {name: 'Holam Haser', mark: '\u05b9', sound: 'oh', example: 'as in go; a dot above the top left of the letter'},
 ];
 const consonants = [
-  ['Bet', 'בּ'], ['Vet', 'ב'],
-  ['Gimel with dagesh', 'גּ'], ['Gimel', 'ג'],
-  ['Dalet with dagesh', 'דּ'], ['Dalet', 'ד'], ['He', 'ה'],
+  ['Alef', 'א'], ['Bet', 'בּ'], ['Vet', 'ב'],
+  ['Gimel', 'ג'],
+  ['Dalet', 'ד'], ['He', 'ה'],
   ['Vav', 'ו'], ['Zayin', 'ז'], ['Chet', 'ח'], ['Tet', 'ט'],
   ['Yod', 'י'], ['Kaf', 'כּ'], ['Chaf', 'כ'], ['Lamed', 'ל'], ['Mem', 'מ'],
   ['Nun', 'נ'], ['Samekh', 'ס'], ['Ayin', 'ע'], ['Peh', 'פּ'], ['Fe', 'פ'],
@@ -25,7 +25,7 @@ const consonants = [
   ['Taf', 'תּ'], ['Saf', 'ת'],
 ].map(([name, glyph]) => ({name, glyph}));
 const allVowels = vowels.map((_, i) => i);
-const key = 'hebrew-practice-v3';
+const key = 'hebrew-practice-v4';
 let state = {count: 8, hints: false, consonant: 0, rows: []};
 try {
   const saved = JSON.parse(localStorage.getItem(key));
