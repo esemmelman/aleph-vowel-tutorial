@@ -1,15 +1,18 @@
 """Generate Sheva practice syllables with the same Hila voice as other vowels."""
 import asyncio
+import re
 from pathlib import Path
 
 import edge_tts
 
 VOICE = 'he-IL-HilaNeural'
-# Explicit syllables keep the practice vowel audible instead of letting Hebrew
-# TTS drop an isolated sheva. Keep this order aligned with app.js.
-SYLLABLES = ['uh', 'buh', 'vuh', 'guh', 'duh', 'huh', 'vuh', 'zuh', 'khuh',
-             'tuh', 'yuh', 'kuh', 'khuh', 'luh', 'muh', 'nuh', 'suh', 'uh',
-             'puh', 'fuh', 'tsuh', 'kuh', 'ruh', 'shuh', 'suh', 'tuh', 'suh']
+# Use native pointed Hebrew, never English approximations such as "buh" or
+# "guh": Hila can interpret those as words or spell their letters aloud.
+SOURCE = Path(__file__).with_name('app.js').read_text(encoding='utf-8')
+LETTERS = re.findall(r"\['[^']+', '([^']+)'\]", SOURCE)
+SYLLABLES = [letter + '\u05b0' for letter in LETTERS]
+# Preserve the accepted isolated "uh" clips for Alef and Ayin.
+ISOLATED_VOWELS = {0, 17}
 
 async def generate():
     folder = Path(__file__).resolve().parent / 'audio'
@@ -17,7 +20,11 @@ async def generate():
     semaphore = asyncio.Semaphore(6)
 
     async def save(i, syllable):
-        path = folder / f'{i}-8-hila.mp3'
+        path = folder / (f'{i}-8-hila.mp3' if i in ISOLATED_VOWELS else f'{i}-8-hebrew.mp3')
+        if i in ISOLATED_VOWELS and path.exists() and path.stat().st_size:
+            return
+        if i in ISOLATED_VOWELS:
+            syllable = 'uh'
         async with semaphore:
             for attempt in range(4):
                 try:

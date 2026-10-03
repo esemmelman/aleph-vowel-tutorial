@@ -10,7 +10,8 @@ folder=Path('audio'); folder.mkdir(exist_ok=True)
 manifest={}
 semaphore=asyncio.Semaphore(6)
 def clip_path(i,j):
-    return folder/f'{i}-{j}{"-hila" if j == 8 else ""}.mp3'
+    suffix = ("-hila" if i in {0, 17} else "-hebrew") if j == 8 else ""
+    return folder/f'{i}-{j}{suffix}.mp3'
 async def generate(i,j,text):
     path=clip_path(i,j)
     if path.exists() and path.stat().st_size>0: return

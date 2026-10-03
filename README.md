@@ -21,4 +21,4 @@ Vowel reference: https://soundsofnikud.com/index_en.html
 
 ## Practice audio
 
-Bundled MP3 clips all use the Microsoft Hebrew Hila voice. Sheva uses explicit practice syllables to keep the short vowel audible. `generate-audio.py` regenerates the Sheva clips, missing Hebrew clips, and `audio-map.js` using Python and `edge-tts`. `generate-sheva.py` regenerates only the Sheva clips with the same Hila voice. Playback itself requires no external speech service.
+Bundled MP3 clips all use the Microsoft Hebrew Hila voice. Sheva consonants use native pointed Hebrew input, avoiding English spellings that can be read as words or letter names. Alef and Ayin retain the isolated “uh” recording. Hila uses modern Israeli Hebrew pronunciation for consonant syllables. `generate-audio.py` regenerates the Sheva clips, missing Hebrew clips, and `audio-map.js` using Python and `edge-tts`. `generate-sheva.py` regenerates only the Sheva clips with the same Hila voice. Playback itself requires no external speech service.
