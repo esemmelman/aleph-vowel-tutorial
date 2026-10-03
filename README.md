@@ -6,7 +6,7 @@ A static, mobile-friendly tutorial with a far-left letter list from Alef through
 - Select a letter to generate three randomized lines with eight letters per line.
 - Alef uses the original groups: Patach/Kamatz/Chirik on line 1, Tzairai/Kubutz on line 2, and the remaining vowel signs on line 3. Other letters use all 13 vowel signs. The three compound vowels (Hataf Patach, Hataf Segol, Hataf Kamatz) appear half as often as before, rounded to whole tiles.
 - Shuffle all lines or a single line; adjust the letter count or show vowel names.
-- Sound starts on; “Include sound” saves your preference. Select a practice tile to hear bundled Hebrew audio, or use “Test sound” to enable sound and play “ah.” No installed speech voice is required. Clips use modern Israeli pronunciation; reduced vowels share their full-vowel sound, and Sheva is demonstrated as vocal Sheva.
+- Sound starts on; “Include sound” saves your preference. Select a practice tile to hear bundled Hebrew audio, or use “Test sound” to enable sound and play “ah.” No installed speech voice is required. Sheva (two vertical dots underneath) is taught as “uh,” with explicit consonant-plus-“uh” clips. Other clips use modern Israeli pronunciation; reduced vowels share their full-vowel sound.
 - The shuffle and settings controls stay visible while scrolling.
 - Read from right to left and select a practice tile to reveal its vowel sound.
 - The selected letter, rows, and settings save automatically in browser local storage.
@@ -21,4 +21,4 @@ Vowel reference: https://soundsofnikud.com/index_en.html
 
 ## Practice audio
 
-Bundled MP3 clips are synthesized with the Microsoft Hebrew Hila voice. `generate-audio.py` regenerates the clips and `audio-map.js` using Python and `edge-tts`. Playback itself requires no external speech service.
+Bundled MP3 clips use the Microsoft Hebrew Hila voice, except the Sheva practice syllables, which use the English Aria voice to produce the requested “uh.” `generate-audio.py` regenerates missing clips and `audio-map.js` using Python and `edge-tts`. Playback itself requires no external speech service.

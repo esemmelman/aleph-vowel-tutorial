@@ -8,7 +8,7 @@ const vowels = [
   {name: 'Segol', mark: '\u05b6', sound: 'eh', example: 'as in bed'},
   {name: 'Holam Male', mark: '\u05d5\u05b9', sound: 'oh', example: 'as in go; written with a vav and a dot above it'},
   {name: 'Shuruk', mark: '\u05d5\u05bc', sound: 'oo', example: 'as in moon; written with a vav'},
-  {name: 'Sheva', mark: '\u05b0', sound: 'short eh / silent', example: 'depends on the word and reading tradition'},
+  {name: 'Sheva', mark: '\u05b0', sound: 'uh', example: 'a short sound, as in about'},
   {name: 'Hataf Patach', mark: '\u05b2', sound: 'short ah', example: 'a reduced vowel, as in father'},
   {name: 'Hataf Segol', mark: '\u05b1', sound: 'short eh', example: 'a reduced vowel, as in bed'},
   {name: 'Hataf Kamatz', mark: '\u05b3', sound: 'short oh', example: 'a reduced vowel, as in go'},

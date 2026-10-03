@@ -9,13 +9,23 @@ groups=[0,0,2,3,4,3,6,4,8,0,3,6,6]
 folder=Path('audio'); folder.mkdir(exist_ok=True)
 manifest={}
 semaphore=asyncio.Semaphore(6)
+# Explicit practice syllables keep Sheva audible as "uh" rather than allowing
+# Hebrew speech synthesis to omit an isolated Sheva or pronounce it as "eh".
+sheva_syllables = ['uh', 'buh', 'vuh', 'guh', 'duh', 'huh', 'vuh', 'zuh',
+                   'khuh', 'tuh', 'yuh', 'kuh', 'khuh', 'luh', 'muh', 'nuh',
+                   'suh', 'uh', 'puh', 'fuh', 'tsuh', 'kuh', 'ruh', 'shuh',
+                   'suh', 'tuh', 'suh']
+def clip_path(i,j):
+    return folder/f'{i}-{j}{"-uh" if j == 8 else ""}.mp3'
 async def generate(i,j,text):
-    path=folder/f'{i}-{j}.mp3'
+    path=clip_path(i,j)
     if path.exists() and path.stat().st_size>0: return
     async with semaphore:
         for attempt in range(4):
             try:
-                await edge_tts.Communicate(text,'he-IL-HilaNeural',rate='-20%').save(str(path))
+                voice = 'en-US-AriaNeural' if j == 8 else 'he-IL-HilaNeural'
+                spoken = sheva_syllables[i] if j == 8 else text
+                await edge_tts.Communicate(spoken,voice,rate='-20%').save(str(path))
                 return
             except Exception:
                 if attempt==3: raise
@@ -26,7 +36,7 @@ async def main():
         for j in sorted(set(groups)):
             jobs.append(generate(i,j,letter+marks[j]))
         for j,group in enumerate(groups):
-            manifest[letter+marks[j]]=f'audio/{i}-{group}.mp3'
+            manifest[letter+marks[j]]=clip_path(i,group).as_posix()
     await asyncio.gather(*jobs)
     Path('audio-map.js').write_text('const practiceAudio = '+json.dumps(manifest,ensure_ascii=False,indent=2)+';\n',encoding='utf-8')
     print(f'Generated {len(jobs)} clips for {len(manifest)} tiles.')
