@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#174c43">
   <title>Hebrew letter · vowel practice</title>
   <link rel="stylesheet" href="style.css">
-  <script src="audio-map.js" defer></script>
-  <script src="app.js" defer></script>
+  <script src="audio-map.js?v=5" defer></script>
+  <script src="app.js?v=5" defer></script>
 </head>
 <body>
   <main>
@@ -15,7 +15,7 @@
     <aside class="letter-picker"><label for="consonant">Choose a letter</label><select id="consonant" lang="he" size="8" aria-label="Hebrew letters from Alef through Taf"></select></aside>
     <section class="practice" aria-label="Hebrew reading practice">
       <div class="sticky-controls">
-      <div class="toolbar"><button id="shuffle">↻ Shuffle all three lines</button></div>
+      <div class="toolbar"><button id="shuffle">↻ Shuffle all three lines</button><button id="test-sound" class="quiet">▶ Test sound</button></div>
       <div class="options"><label>Letters per line <select id="count"><option>6</option><option selected>8</option><option>12</option><option>18</option></select></label><label><input id="hints" type="checkbox"> Show vowel names</label><label><input id="sound" type="checkbox"> Include sound</label></div>
       </div>
       <section class="line"><div class="line-heading"><h3><span>01</span> All vowel signs</h3><button class="quiet" data-shuffle="0">Shuffle line 1</button></div><div id="row-0" class="letters" dir="rtl" lang="he"></div></section>

@@ -27,7 +27,8 @@ const consonants = [
 const allVowels = vowels.map((_, i) => i);
 const alefGroups = [[0, 1, 2], [3, 4], allVowels.filter(i => i >= 5)];
 const alefHeadings = ['Patach · Kamatz · Chirik', 'Tzairai · Kubutz', 'Remaining vowel signs'];
-const key = 'hebrew-practice-v4';
+const compoundVowels = [9, 10, 11];
+const key = 'hebrew-practice-v5';
 let state = {count: 8, hints: false, consonant: 0, rows: []};
 try {
   const saved = JSON.parse(localStorage.getItem(key));
@@ -39,6 +40,24 @@ try {
   }
 } catch { /* Storage may be unavailable; practice still works. */ }
 function randomRow(group, count = state.count) {
+  const compound = group.filter(i => compoundVowels.includes(i));
+  if (compound.length) {
+    const simple = group.filter(i => !compoundVowels.includes(i));
+    const compoundCount = Math.round(count * compound.length / group.length / 2);
+    const row = [...deal(compound, compoundCount), ...deal(simple, count - compoundCount)];
+    return shuffled(row);
+  }
+  return deal(group, count);
+}
+function shuffled(items) {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+function deal(group, count) {
   const shuffledGroup = [...group];
   for (let i = shuffledGroup.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -54,7 +73,8 @@ function randomRow(group, count = state.count) {
 function save() { try { localStorage.setItem(key, JSON.stringify(state)); } catch {
   document.querySelector('#feedback').textContent = 'Browser storage is unavailable. You can still practice here.';
 } }
-let soundEnabled = false;
+let soundEnabled = true;
+try { soundEnabled = localStorage.getItem('hebrew-sound') !== 'off'; } catch {}
 let activeAudio = null;
 function stopSound() {
   if (activeAudio) {
@@ -66,11 +86,17 @@ function stopSound() {
 function playSound(text) {
   if (!soundEnabled) return;
   stopSound();
-  const clip = new Audio(practiceAudio[text]);
+  const source = practiceAudio[text];
+  if (!source) {
+    document.querySelector('#feedback').textContent = 'No audio clip is available for this letter.';
+    return;
+  }
+  const clip = new Audio(new URL(source, document.baseURI).href);
+  clip.volume = 1;
   activeAudio = clip;
   clip.play().catch(error => {
     if (activeAudio !== clip || error.name === 'AbortError') return;
-    document.querySelector('#feedback').textContent += ' Audio could not play. Check your volume and try selecting the letter again.';
+    document.querySelector('#feedback').textContent += ` Audio could not play (${error.name}). Try Test sound and check the browser tab’s sound setting.`;
   });
 }
 function render() {
@@ -106,7 +132,7 @@ function render() {
 }
 function freshRows() {
   if (state.consonant === 0) return alefGroups.map(group => randomRow(group));
-  // Deal a balanced shuffled pool across all three lines so every vowel appears.
+  // Reduce paired marks to half their previous share, rounded to whole tiles.
   const dealt = randomRow(allVowels, state.count * 3);
   return [0, 1, 2].map(i => dealt.slice(i * state.count, (i + 1) * state.count));
 }
@@ -134,11 +160,19 @@ picker.addEventListener('change', e => {
 document.querySelector('#count').value = state.count;
 document.querySelector('#hints').checked = state.hints;
 const soundCheckbox = document.querySelector('#sound');
-soundCheckbox.checked = false;
+soundCheckbox.checked = soundEnabled;
 soundCheckbox.addEventListener('change', e => {
   soundEnabled = e.target.checked;
+  try { localStorage.setItem('hebrew-sound', soundEnabled ? 'on' : 'off'); } catch {}
   if (!soundEnabled) stopSound();
   else document.querySelector('#feedback').textContent = 'Sound is on. Select a practice letter to hear it.';
+});
+document.querySelector('#test-sound').addEventListener('click', () => {
+  soundEnabled = true;
+  soundCheckbox.checked = true;
+  try { localStorage.setItem('hebrew-sound', 'on'); } catch {}
+  document.querySelector('#feedback').textContent = 'Playing “ah.”';
+  playSound(consonants[0].glyph + vowels[0].mark);
 });
 document.querySelector('#count').addEventListener('change', e => {state.count = Number(e.target.value); shuffle();});
 document.querySelector('#hints').addEventListener('change', e => {state.hints = e.target.checked; render();});
