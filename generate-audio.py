@@ -10,7 +10,7 @@ folder=Path('audio'); folder.mkdir(exist_ok=True)
 manifest={}
 semaphore=asyncio.Semaphore(6)
 def clip_path(i,j):
-    return folder/f'{i}-{j}{"-phonemes" if j == 8 else ""}.mp3'
+    return folder/f'{i}-{j}{"-hila" if j == 8 else ""}.mp3'
 async def generate(i,j,text):
     path=clip_path(i,j)
     if path.exists() and path.stat().st_size>0: return
@@ -25,7 +25,7 @@ async def generate(i,j,text):
 async def main():
     import runpy
     sheva = runpy.run_path(str(Path(__file__).with_name('generate-sheva.py')))
-    sheva['generate']()
+    await sheva['generate']()
     jobs=[]
     for i,letter in enumerate(letters):
         for j in sorted(set(groups) - {8}):

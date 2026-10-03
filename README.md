@@ -21,4 +21,4 @@ Vowel reference: https://soundsofnikud.com/index_en.html
 
 ## Practice audio
 
-Bundled MP3 clips use the Microsoft Hebrew Hila voice, except the Sheva practice syllables, which use eSpeak NG with explicit consonant-plus-schwa phonemes to produce the requested “uh” without spelling letter names. `generate-audio.py` regenerates the Sheva clips, missing Hebrew clips, and `audio-map.js` using Python, `edge-tts`, `espeakng-loader`, and `imageio-ffmpeg`. `generate-sheva.py` verifies the emitted phoneme sequence for every syllable before saving audio. Playback itself requires no external speech service.
+Bundled MP3 clips all use the Microsoft Hebrew Hila voice. Sheva uses explicit practice syllables to keep the short vowel audible. `generate-audio.py` regenerates the Sheva clips, missing Hebrew clips, and `audio-map.js` using Python and `edge-tts`. `generate-sheva.py` regenerates only the Sheva clips with the same Hila voice. Playback itself requires no external speech service.
