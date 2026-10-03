@@ -15,14 +15,17 @@ const vowels = [
   {name: 'Holam Haser', mark: '\u05b9', sound: 'oh', example: 'as in go; a dot above the top left of the letter'},
 ];
 const consonants = [
-  ['Bet', 'ב'], ['Gimel', 'ג'], ['Dalet', 'ד'], ['He', 'ה'],
+  ['Bet', 'בּ'], ['Vet', 'ב'],
+  ['Gimel with dagesh', 'גּ'], ['Gimel', 'ג'],
+  ['Dalet with dagesh', 'דּ'], ['Dalet', 'ד'], ['He', 'ה'],
   ['Vav', 'ו'], ['Zayin', 'ז'], ['Chet', 'ח'], ['Tet', 'ט'],
-  ['Yod', 'י'], ['Kaf', 'כ'], ['Lamed', 'ל'], ['Mem', 'מ'],
-  ['Nun', 'נ'], ['Samekh', 'ס'], ['Ayin', 'ע'], ['Pe', 'פ'],
-  ['Tsadi', 'צ'], ['Qof', 'ק'], ['Resh', 'ר'], ['Shin', 'ש'], ['Taf', 'ת'],
+  ['Yod', 'י'], ['Kaf', 'כּ'], ['Chaf', 'כ'], ['Lamed', 'ל'], ['Mem', 'מ'],
+  ['Nun', 'נ'], ['Samekh', 'ס'], ['Ayin', 'ע'], ['Peh', 'פּ'], ['Fe', 'פ'],
+  ['Tsadi', 'צ'], ['Qof', 'ק'], ['Resh', 'ר'], ['Shin', 'שׁ'], ['Sin', 'שׂ'],
+  ['Taf', 'תּ'], ['Saf', 'ת'],
 ].map(([name, glyph]) => ({name, glyph}));
 const allVowels = vowels.map((_, i) => i);
-const key = 'hebrew-practice-v2';
+const key = 'hebrew-practice-v3';
 let state = {count: 8, hints: false, consonant: 0, rows: []};
 try {
   const saved = JSON.parse(localStorage.getItem(key));
@@ -90,7 +93,8 @@ const picker = document.querySelector('#consonant');
 consonants.forEach((letter, i) => {
   const option = document.createElement('option');
   option.value = i;
-  option.textContent = `${letter.glyph} · ${letter.name}`;
+  option.textContent = letter.glyph;
+  option.setAttribute('aria-label', letter.name);
   picker.append(option);
 });
 picker.value = state.consonant;

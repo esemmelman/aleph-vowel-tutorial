@@ -2,6 +2,7 @@
 
 A static, mobile-friendly tutorial with a left-hand letter list from Bet through Taf.
 
+- The letter list displays Hebrew glyphs in the same font and size as the practice tiles, including dotted and undotted variants and Shin/Sin.
 - Select a letter to generate three randomized lines with eight letters per line.
 - Each fresh set includes all 13 vowel signs, balanced across the three lines.
 - Shuffle all lines or a single line; adjust the letter count or show vowel names.
