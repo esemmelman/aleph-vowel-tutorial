@@ -30,7 +30,9 @@ const specialEntries = [
     name, glyph, items: [['בַ','Bet + Patach'],['מִ','Mem + Chirik'],['לֶ','Lamed + Segol'],['שׁוֹ','Shin + Holam']].map(([start, label], j) => ({
       glyph: start + glyph, id: `final-${['chaf','mem','nun','fe','tsadi'][i]}-${['bah','mee','leh','shoh'][j]}`, label: `${label} + ${name}`
     }))
-  }))
+  })),
+  {name: 'Final Chaf with Sheva', glyph: 'ךְ', items: [{glyph: 'ךְ', id: 'final-chaf-sheva', label: 'Final Chaf + Sheva (two dots)'}]},
+  {name: 'Final Chaf with Kamatz', glyph: 'ךָ', items: [{glyph: 'ךָ', id: 'final-chaf-kamatz', label: 'Final Chaf + Kamatz'}]}
 ];
 const pickerEntries = [...consonants, ...specialEntries];
 const allVowels = vowels.map((_, i) => i);
