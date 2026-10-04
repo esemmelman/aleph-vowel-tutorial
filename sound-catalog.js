@@ -19,3 +19,7 @@ consonants.forEach((letter, c) => vowels.forEach((vowel, v) => {
   }
   entry.examples.push(`${letter.name} + ${vowel.name}`);
 }));
+specialEntries.forEach(entry => entry.items.forEach(item => {
+  soundByGlyph[item.glyph] = item.id;
+  uniqueSounds.push({id: item.id, label: item.label, examples: [item.label], glyph: item.glyph});
+}));

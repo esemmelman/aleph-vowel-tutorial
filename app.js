@@ -24,6 +24,15 @@ const consonants = [
   ['Tsadi', 'צ'], ['Qof', 'ק'], ['Resh', 'ר'], ['Shin', 'שׁ'], ['Sin', 'שׂ'],
   ['Taf', 'תּ'], ['Saf', 'ת'],
 ].map(([name, glyph]) => ({name, glyph}));
+const specialEntries = [
+  {name: 'Alef Patach Yod', glyph: 'אַי', items: [{glyph: 'אַי', id: 'alef-patach-yod', label: 'Alef + Patach + Yod'}]},
+  ...[['Final Chaf','ך'],['Final Mem','ם'],['Final Nun','ן'],['Final Fe','ף'],['Final Tsadi','ץ']].map(([name, glyph], i) => ({
+    name, glyph, items: [['בַ','Bet + Patach'],['מִ','Mem + Chirik'],['לֶ','Lamed + Segol'],['שׁוֹ','Shin + Holam']].map(([start, label], j) => ({
+      glyph: start + glyph, id: `final-${['chaf','mem','nun','fe','tsadi'][i]}-${['bah','mee','leh','shoh'][j]}`, label: `${label} + ${name}`
+    }))
+  }))
+];
+const pickerEntries = [...consonants, ...specialEntries];
 const allVowels = vowels.map((_, i) => i);
 const alefGroups = [[0, 1, 2], [3, 4], allVowels.filter(i => i >= 5)];
 const alefHeadings = ['Patach · Kamatz · Chirik', 'Tzairai · Kubutz', 'Remaining vowel signs'];
@@ -33,7 +42,7 @@ let state = {count: 8, hints: false, consonant: 0, rows: []};
 try {
   const saved = JSON.parse(localStorage.getItem(key));
   if (saved && [6,8,12,18].includes(saved.count) && typeof saved.hints === 'boolean' &&
-      Number.isInteger(saved.consonant) && consonants[saved.consonant] &&
+      Number.isInteger(saved.consonant) && pickerEntries[saved.consonant] &&
       Array.isArray(saved.rows) && saved.rows.length === 3 && saved.rows.every(row =>
         Array.isArray(row) && row.length === saved.count && row.every(v => allVowels.includes(v)))) {
     state = saved;
@@ -88,7 +97,7 @@ function playSound(text) {
   stopSound();
   const source = window.recordedSounds?.[soundByGlyph[text]] || practiceAudio[text];
   if (!source) {
-    document.querySelector('#feedback').textContent = 'No audio clip is available for this letter.';
+    document.querySelector('#feedback').textContent = 'No recording is available yet. Record and save this sound in Record unique sounds below.';
     return;
   }
   const clip = new Audio(new URL(source, document.baseURI).href);
@@ -100,6 +109,32 @@ function playSound(text) {
   });
 }
 function render() {
+  const special = specialEntries[state.consonant - consonants.length];
+  document.querySelector('#count').disabled = !!special;
+  document.querySelectorAll('.line').forEach((line, i) => { line.hidden = !!special && i > 0; });
+  if (special) {
+    const heading = document.querySelector('.line-heading h3');
+    heading.replaceChildren(heading.querySelector('span'), document.createTextNode(' ' + special.name));
+    const container = document.querySelector('#row-0');
+    container.replaceChildren();
+    container.classList.add('special-letters');
+    special.items.forEach(item => {
+      const button = document.createElement('button'); button.className = 'letter';
+      button.setAttribute('aria-label', item.label);
+      const glyph = document.createElement('span'); glyph.className = 'glyph'; glyph.textContent = item.glyph;
+      button.append(glyph);
+      if (state.hints) { const hint = document.createElement('span'); hint.className = 'hint'; hint.dir = 'ltr'; hint.textContent = item.label; button.append(hint); }
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
+        button.classList.add('selected');
+        document.querySelector('#feedback').textContent = item.label;
+        playSound(item.glyph);
+      });
+      container.append(button);
+    });
+    save(); return;
+  }
+  document.querySelector('#row-0').classList.remove('special-letters');
   document.querySelectorAll('.line-heading h3').forEach((heading, i) => {
     heading.replaceChildren(heading.querySelector('span'), document.createTextNode(
       ' ' + (state.consonant === 0 ? alefHeadings[i] : 'All vowel signs')));
@@ -143,7 +178,7 @@ function shuffle(line) {
   render();
 }
 const picker = document.querySelector('#consonant');
-consonants.forEach((letter, i) => {
+pickerEntries.forEach((letter, i) => {
   const option = document.createElement('option');
   option.value = i;
   option.textContent = letter.glyph;
