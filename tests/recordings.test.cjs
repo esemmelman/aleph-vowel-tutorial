@@ -13,7 +13,7 @@ test('all 351 glyphs map to 147 sounds including separate Segol letters', () => 
   const ctx = catalog();
   assert.equal(vm.runInContext('uniqueSounds.length',ctx),147);
   assert.equal(vm.runInContext('Object.keys(soundByGlyph).length',ctx),351);
-  for (const [a,b] of [[0,1],[0,9],[3,10],[4,7],[6,11],[6,12]])
+  for (const [a,b] of [[0,1],[0,9],[5,10],[4,7],[6,11],[6,12]])
     assert.equal(vm.runInContext(`soundId(1,${a}) === soundId(1,${b})`,ctx),true);
   for (const [a,b] of [[0,17],[2,6],[8,12],[9,25],[11,21],[16,24],[25,26]])
     assert.equal(vm.runInContext(`soundId(${a},8) === soundId(${b},8)`,ctx),true);
@@ -21,7 +21,8 @@ test('all 351 glyphs map to 147 sounds including separate Segol letters', () => 
   assert.equal(vm.runInContext('new Set(consonants.map((_, c) => soundId(c,5))).size',ctx),27);
   for (let c = 0; c < 27; c++) {
     assert.notEqual(vm.runInContext(`soundId(${c},5)`,ctx),vm.runInContext(`soundId(${c},3)`,ctx));
-    assert.equal(vm.runInContext(`uniqueSounds.find(s => s.id === soundId(${c},5)).examples.length`,ctx),1);
+    assert.equal(vm.runInContext(`soundId(${c},10)`,ctx),vm.runInContext(`soundId(${c},5)`,ctx));
+    assert.equal(vm.runInContext(`uniqueSounds.find(s => s.id === soundId(${c},5)).examples.length`,ctx),2);
   }
 });
 test('record preview, upload, metadata publication and shared playback', async () => {
