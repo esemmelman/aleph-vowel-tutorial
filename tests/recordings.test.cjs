@@ -75,11 +75,13 @@ test('special entries have one Alef Patach Yod and four distinct combinations pe
   assert.equal(vm.runInContext('new Set(specialEntries.flatMap(e => e.items.map(i => i.id))).size',ctx),21);
   assert.equal(vm.runInContext('recordingOnlyItems.every(i => uniqueSounds.some(s => s.id === i.id))',ctx),true);
   assert.equal(vm.runInContext("specialEntries[1].items.some(i => i.glyph === 'ךְ') && specialEntries[1].items.some(i => i.glyph === 'ךָ')",ctx),true);
+  assert.equal(vm.runInContext("pickerEntries.filter(i => i.name === 'Final Chaf').every(i => /ך[ְָ]/.test(i.glyph))",ctx),true);
+  assert.equal(vm.runInContext("uniqueSounds.filter(i => i.glyph.includes('ך')).every(i => /ך[ְָ]/.test(i.glyph))",ctx),true);
   assert.equal(vm.runInContext("soundByGlyph['ךְ']",ctx),'final-chaf-sheva');
   assert.equal(vm.runInContext("soundByGlyph['ךָ']",ctx),'final-chaf-kamatz');
   for (let n = 1; n <= 5; n++) {
     assert.equal(vm.runInContext(`specialEntries[${n}].items.length`,ctx),4);
-    assert.equal(vm.runInContext(`specialEntries[${n}].items.every(i => i.glyph.replace(/[\\u0591-\\u05c7]/g, '').endsWith(specialEntries[${n}].glyph) && soundByGlyph[i.glyph] === i.id && uniqueSounds.some(s => s.id === i.id))`,ctx),true);
+    assert.equal(vm.runInContext(`specialEntries[${n}].items.every(i => i.glyph.replace(/[\\u0591-\\u05c7]/g, '').endsWith(specialEntries[${n}].glyph.replace(/[\\u0591-\\u05c7]/g, '')) && soundByGlyph[i.glyph] === i.id && uniqueSounds.some(s => s.id === i.id))`,ctx),true);
   }
 });
 test('picker renders special tiles, plays their recordings, and returns to ordinary practice', () => {

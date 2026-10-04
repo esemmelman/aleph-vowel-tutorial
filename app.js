@@ -26,9 +26,9 @@ const consonants = [
 ].map(([name, glyph]) => ({name, glyph}));
 const specialEntries = [
   {name: 'Alef Patach Yod', glyph: 'אַי', items: [{glyph: 'אַי', id: 'alef-patach-yod', label: 'Alef + Patach + Yod'}]},
-  ...[['Final Chaf','ך'],['Final Mem','ם'],['Final Nun','ן'],['Final Fe','ף'],['Final Tsadi','ץ']].map(([name, glyph], i) => ({
+  ...[['Final Chaf','ךְ'],['Final Mem','ם'],['Final Nun','ן'],['Final Fe','ף'],['Final Tsadi','ץ']].map(([name, glyph], i) => ({
     name, glyph, items: [['בַ','Bet + Patach'],['מִ','Mem + Chirik'],['לֶ','Lamed + Segol'],['שׁוֹ','Shin + Holam']].map(([start, label], j) => ({
-      glyph: start + glyph, id: `final-${['chaf','mem','nun','fe','tsadi'][i]}-${['bah','mee','leh','shoh'][j]}`, label: `${label} + ${name}`
+      glyph: start + glyph, id: `final-${['chaf','mem','nun','fe','tsadi'][i]}-${['bah','mee','leh','shoh'][j]}`, label: `${label} + ${name}${i === 0 ? ' + Sheva (two dots)' : ''}`
     }))
   }))
 ];
