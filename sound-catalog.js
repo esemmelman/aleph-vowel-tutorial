@@ -2,7 +2,10 @@
 // Israeli pronunciation, preserving this tutorial's distinct short-uh Sheva.
 const consonantSounds = ['vowel','b','v','g','d','h','v','z','kh','t','y','k','kh','l','m','n','s','vowel','p','f','ts','k','r','sh','s','t','t'];
 const vowelSounds = ['ah','ah','ee','eh','oo','eh','oh','oo','uh','ah','eh','oh','oh'];
-function soundId(consonant, vowel) { return `${consonantSounds[consonant]}-${vowelSounds[vowel]}`; }
+function soundId(consonant, vowel) {
+  if (vowel === 5) return `segol-${consonants[consonant].name.toLowerCase()}`;
+  return `${consonantSounds[consonant]}-${vowelSounds[vowel]}`;
+}
 const uniqueSounds = [];
 const soundByGlyph = {};
 consonants.forEach((letter, c) => vowels.forEach((vowel, v) => {
