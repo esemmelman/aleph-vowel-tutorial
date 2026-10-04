@@ -37,6 +37,10 @@ const recordingOnlyItems = specialEntries[1].items.splice(2, 2,
   {glyph: 'ךְ', id: 'final-chaf-sheva', label: 'Final Chaf + Sheva (two dots)'},
   {glyph: 'ךָ', id: 'final-chaf-kamatz', label: 'Final Chaf + Kamatz'}
 );
+recordingOnlyItems.push(...specialEntries[1].items.splice(2, 2,
+  {glyph: 'לְךָ', id: 'final-chaf-lecha', label: 'Lecha (to you) — Final Chaf + Kamatz'},
+  {glyph: 'שֶׁלְּךָ', id: 'final-chaf-shelcha', label: 'Shelcha (yours) — Final Chaf + Kamatz'}
+));
 const pickerEntries = [...consonants, ...specialEntries];
 const allVowels = vowels.map((_, i) => i);
 const alefGroups = [[0, 1, 2], [3, 4], allVowels.filter(i => i >= 5)];

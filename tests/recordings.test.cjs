@@ -9,10 +9,10 @@ function catalog() {
   vm.runInContext(fs.readFileSync('sound-catalog.js','utf8'), context);
   return context;
 }
-test('all 374 glyphs map to 176 sounds including special practice items', () => {
+test('all 376 glyphs map to 178 sounds including special practice items', () => {
   const ctx = catalog();
-  assert.equal(vm.runInContext('uniqueSounds.length',ctx),176);
-  assert.equal(vm.runInContext('Object.keys(soundByGlyph).length',ctx),374);
+  assert.equal(vm.runInContext('uniqueSounds.length',ctx),178);
+  assert.equal(vm.runInContext('Object.keys(soundByGlyph).length',ctx),376);
   for (const [a,b] of [[0,1],[0,9],[5,10],[4,7],[6,11],[6,12]])
     assert.equal(vm.runInContext(`soundId(1,${a}) === soundId(1,${b})`,ctx),true);
   for (const [a,b] of [[0,17],[2,6],[9,25],[11,21],[16,24],[25,26]])
@@ -65,7 +65,7 @@ test('record preview, upload, metadata publication and shared playback', async (
   const metadata = requests.find(r=>r.url.includes('on_conflict'));
   assert.equal(JSON.parse(metadata.options.body).sound_id,'vowel-ah');
   assert.match(ctx.window.recordedSounds['vowel-ah'],/vowel-ah\/1234-abcd.webm$/);
-  assert.match(element('record-progress').textContent,/1 of 176/);
+  assert.match(element('record-progress').textContent,/1 of 178/);
 });
 test('special entries have one Alef Patach Yod and four distinct combinations per final letter', () => {
   const ctx = catalog();
@@ -74,7 +74,9 @@ test('special entries have one Alef Patach Yod and four distinct combinations pe
   assert.equal(vm.runInContext('specialEntries.length',ctx),6);
   assert.equal(vm.runInContext('new Set(specialEntries.flatMap(e => e.items.map(i => i.id))).size',ctx),21);
   assert.equal(vm.runInContext('recordingOnlyItems.every(i => uniqueSounds.some(s => s.id === i.id))',ctx),true);
-  assert.equal(vm.runInContext("specialEntries[1].items.some(i => i.glyph === 'ךְ') && specialEntries[1].items.some(i => i.glyph === 'ךָ')",ctx),true);
+  assert.equal(vm.runInContext("specialEntries[1].items.slice(2).map(i => i.glyph).join(',')",ctx),'לְךָ,שֶׁלְּךָ');
+  assert.equal(vm.runInContext("soundByGlyph['לְךָ']",ctx),'final-chaf-lecha');
+  assert.equal(vm.runInContext("soundByGlyph['שֶׁלְּךָ']",ctx),'final-chaf-shelcha');
   assert.equal(vm.runInContext("pickerEntries.filter(i => i.name === 'Final Chaf').every(i => /ך[ְָ]/.test(i.glyph))",ctx),true);
   assert.equal(vm.runInContext("uniqueSounds.filter(i => i.glyph.includes('ך')).every(i => /ך[ְָ]/.test(i.glyph))",ctx),true);
   assert.equal(vm.runInContext("soundByGlyph['ךְ']",ctx),'final-chaf-sheva');

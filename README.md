@@ -21,7 +21,7 @@ Vowel reference: https://soundsofnikud.com/index_en.html
 
 ## Special practice entries
 
-The letter list also includes Alef + Patach + Yod (one tile) and the five final letters (four combinations each). Each final letter appears once in the list. Final Chaf appears with Sheva in the list and shows two letter-and-vowel samples ending in Final Chaf with Sheva plus Final Chaf with Sheva (two dots) and Final Chaf with Kamatz on the same line. The 21 displayed special combinations and two retained earlier Chaf samples have separate recording slots, bringing the total to 176. Record and save them in Record unique sounds to enable their audio.
+The letter list also includes Alef + Patach + Yod (one tile) and the five final letters (four combinations each). Each final letter appears once in the list. Final Chaf appears with Sheva in the list and shows two letter-and-vowel samples ending in Final Chaf with Sheva plus the words Lecha and Shelcha, both ending in Final Chaf with Kamatz. The 21 displayed special combinations and four retained earlier Chaf samples have separate recording slots, bringing the total to 178. Record and save them in Record unique sounds to enable their audio.
 
 ## Practice audio
 
