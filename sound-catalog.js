@@ -4,6 +4,7 @@ const consonantSounds = ['vowel','b','v','g','d','h','v','z','kh','t','y','k','k
 const vowelSounds = ['ah','ah','ee','eh','oo','eh','oh','oo','uh','ah','eh','oh','oh'];
 function soundId(consonant, vowel) {
   if (vowel === 5 || vowel === 10) return `segol-${consonants[consonant].name.toLowerCase()}`;
+  if (consonants[consonant].name === 'Chaf') return `chaf-${vowelSounds[vowel]}`;
   return `${consonantSounds[consonant]}-${vowelSounds[vowel]}`;
 }
 const uniqueSounds = [];
