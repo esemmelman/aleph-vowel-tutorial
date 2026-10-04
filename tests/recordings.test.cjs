@@ -71,13 +71,15 @@ test('special entries have one Alef Patach Yod and four distinct combinations pe
   const ctx = catalog();
   assert.equal(vm.runInContext('specialEntries[0].items.length',ctx),1);
   assert.equal(vm.runInContext("soundByGlyph['אַי']",ctx),'alef-patach-yod');
-  assert.equal(vm.runInContext('specialEntries.length',ctx),8);
-  assert.equal(vm.runInContext('new Set(specialEntries.flatMap(e => e.items.map(i => i.id))).size',ctx),23);
+  assert.equal(vm.runInContext('specialEntries.length',ctx),6);
+  assert.equal(vm.runInContext('new Set(specialEntries.flatMap(e => e.items.map(i => i.id))).size',ctx),21);
+  assert.equal(vm.runInContext('recordingOnlyItems.every(i => uniqueSounds.some(s => s.id === i.id))',ctx),true);
+  assert.equal(vm.runInContext("specialEntries[1].items.some(i => i.glyph === 'ךְ') && specialEntries[1].items.some(i => i.glyph === 'ךָ')",ctx),true);
   assert.equal(vm.runInContext("soundByGlyph['ךְ']",ctx),'final-chaf-sheva');
   assert.equal(vm.runInContext("soundByGlyph['ךָ']",ctx),'final-chaf-kamatz');
   for (let n = 1; n <= 5; n++) {
     assert.equal(vm.runInContext(`specialEntries[${n}].items.length`,ctx),4);
-    assert.equal(vm.runInContext(`specialEntries[${n}].items.every(i => i.glyph.endsWith(specialEntries[${n}].glyph) && soundByGlyph[i.glyph] === i.id && uniqueSounds.some(s => s.id === i.id))`,ctx),true);
+    assert.equal(vm.runInContext(`specialEntries[${n}].items.every(i => i.glyph.replace(/[\\u0591-\\u05c7]/g, '').endsWith(specialEntries[${n}].glyph) && soundByGlyph[i.glyph] === i.id && uniqueSounds.some(s => s.id === i.id))`,ctx),true);
   }
 });
 test('picker renders special tiles, plays their recordings, and returns to ordinary practice', () => {
@@ -97,10 +99,10 @@ test('picker renders special tiles, plays their recordings, and returns to ordin
   });
   vm.runInContext(app,ctx);
   vm.runInContext(fs.readFileSync('sound-catalog.js','utf8'),ctx);
-  assert.equal(get('#consonant').children.length,35);
-  for (let index = 27; index < 35; index++) {
+  assert.equal(get('#consonant').children.length,33);
+  for (let index = 27; index < 33; index++) {
     get('#consonant').listeners.change({target:{value:String(index)}});
-    assert.equal(get('#row-0').children.length,index === 27 || index >= 33 ? 1 : 4);
+    assert.equal(get('#row-0').children.length,index === 27 ? 1 : 4);
     assert.equal(lines[0].hidden,false);
     assert.equal(lines[1].hidden,true);
     assert.equal(lines[2].hidden,true);
@@ -110,7 +112,7 @@ test('picker renders special tiles, plays their recordings, and returns to ordin
     get('#row-0').children[0].listeners.click();
     assert.equal(played.at(-1),ctx.window.recordedSounds[id]);
     get('#shuffle').listeners.click();
-    assert.equal(get('#row-0').children.length,index === 27 || index >= 33 ? 1 : 4);
+    assert.equal(get('#row-0').children.length,index === 27 ? 1 : 4);
   }
   get('#consonant').listeners.change({target:{value:'1'}});
   assert.equal(get('#row-0').children.length,8);

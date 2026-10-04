@@ -30,10 +30,13 @@ const specialEntries = [
     name, glyph, items: [['בַ','Bet + Patach'],['מִ','Mem + Chirik'],['לֶ','Lamed + Segol'],['שׁוֹ','Shin + Holam']].map(([start, label], j) => ({
       glyph: start + glyph, id: `final-${['chaf','mem','nun','fe','tsadi'][i]}-${['bah','mee','leh','shoh'][j]}`, label: `${label} + ${name}`
     }))
-  })),
-  {name: 'Final Chaf with Sheva', glyph: 'ךְ', items: [{glyph: 'ךְ', id: 'final-chaf-sheva', label: 'Final Chaf + Sheva (two dots)'}]},
-  {name: 'Final Chaf with Kamatz', glyph: 'ךָ', items: [{glyph: 'ךָ', id: 'final-chaf-kamatz', label: 'Final Chaf + Kamatz'}]}
+  }))
 ];
+// Keep the previous sample recordings available for review and replacement.
+const recordingOnlyItems = specialEntries[1].items.splice(2, 2,
+  {glyph: 'ךְ', id: 'final-chaf-sheva', label: 'Final Chaf + Sheva (two dots)'},
+  {glyph: 'ךָ', id: 'final-chaf-kamatz', label: 'Final Chaf + Kamatz'}
+);
 const pickerEntries = [...consonants, ...specialEntries];
 const allVowels = vowels.map((_, i) => i);
 const alefGroups = [[0, 1, 2], [3, 4], allVowels.filter(i => i >= 5)];
@@ -43,6 +46,7 @@ const key = 'hebrew-practice-v5';
 let state = {count: 8, hints: false, consonant: 0, rows: []};
 try {
   const saved = JSON.parse(localStorage.getItem(key));
+  if (saved && (saved.consonant === 33 || saved.consonant === 34)) saved.consonant = 28;
   if (saved && [6,8,12,18].includes(saved.count) && typeof saved.hints === 'boolean' &&
       Number.isInteger(saved.consonant) && pickerEntries[saved.consonant] &&
       Array.isArray(saved.rows) && saved.rows.length === 3 && saved.rows.every(row =>
