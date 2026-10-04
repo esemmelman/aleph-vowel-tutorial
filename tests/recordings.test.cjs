@@ -34,7 +34,7 @@ test('record preview, upload, metadata publication and shared playback', async (
     stop() {this.state='inactive';this.ondataavailable({data:new Blob(['test audio'])});this.onstop();}
   }
   Object.assign(ctx, {window:{hebrewSupabase:{url:'https://example.supabase.co',key:'public'},isSecureContext:true,MediaRecorder:Recorder,addEventListener(){}},
-    document:{getElementById:element,createElement:()=>({})}, navigator:{mediaDevices:{getUserMedia:async()=>({getTracks:()=>[{stop(){tracksStopped++;}}]})}},
+    document:{getElementById:element,createElement:()=>({setAttribute(){}})}, navigator:{mediaDevices:{getUserMedia:async()=>({getTracks:()=>[{stop(){tracksStopped++;}}]})}},
     MediaRecorder:Recorder,Blob,URL:{createObjectURL:()=> 'blob:preview',revokeObjectURL(){}},crypto:{randomUUID:()=> '1234-abcd'},
     setTimeout:()=>1,clearTimeout(){},stopSound(){},fetch:async(url,options)=> {
       requests.push({url,options});

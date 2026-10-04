@@ -43,7 +43,8 @@
   function progress() {
     for (const option of $('record-sound').options) {
       const entry = uniqueSounds.find(sound => sound.id === option.value);
-      option.textContent = `${saved[entry.id] ? '✓' : '○'} ${entry.label} · ${entry.glyph}`;
+      option.textContent = entry.glyph;
+      option.setAttribute('aria-label', `${entry.label}${saved[entry.id] ? ', recorded' : ', not recorded'}`);
     }
     $('record-progress').textContent = `${uniqueSounds.filter(sound => saved[sound.id]).length} of ${uniqueSounds.length} unique sounds saved.`;
   }
