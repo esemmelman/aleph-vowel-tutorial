@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#174c43">
   <title>Hebrew letter · vowel practice</title>
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=11">
   <script src="audio-map.js?v=10" defer></script>
-  <script src="app.js?v=10" defer></script>
+  <script src="app.js?v=11" defer></script>
+  <script src="sound-catalog.js?v=11" defer></script>
+  <script src="supabase-config.js?v=11" defer></script>
+  <script src="recordings.js?v=11" defer></script>
 </head>
 <body>
   <main>
@@ -26,6 +29,18 @@
     </div>
     <section class="guide" aria-labelledby="guide-title"><span class="eyebrow">A SMALL GUIDE</span><h2 id="guide-title">The marks make the sound.</h2><div id="vowel-guide" class="guide-grid"></div><p class="note">Tzairai (Tsere) is often taught as “ay”; in modern Israeli Hebrew it is usually “eh.” Here Kamatz uses the common “ah” sound. Pronunciation varies by reading tradition.</p></section>
     <footer>Practice a little, every day. <a href="https://soundsofnikud.com/index_en.html" target="_blank" rel="noopener noreferrer">Explore Hebrew vowel sounds ↗</a></footer>
+    <section class="guide recording-panel" aria-labelledby="record-title">
+      <h2 id="record-title">Record unique sounds</h2>
+      <p class="note">Record each letter-and-vowel pronunciation once. Matching letters and vowel marks share the recording. Saved recordings play for everyone; missing sounds use the original clips.</p>
+      <form id="record-login"><label>Email <input id="record-email" type="email" required autocomplete="email"></label><label>Password <input id="record-password" type="password" required autocomplete="current-password"></label><button>Sign in to record</button></form>
+      <button id="record-logout" hidden>Sign out</button>
+      <p id="record-status" role="status" aria-live="polite">Loading recordings…</p>
+      <label>Unique sound <select id="record-sound"></select></label>
+      <p id="record-examples" class="note"></p>
+      <div class="record-actions"><button id="record-start" disabled>● Record</button><button id="record-stop" disabled>■ Stop</button><button id="record-save" disabled>Save recording</button><button id="record-next">Next missing sound →</button></div>
+      <audio id="record-preview" controls hidden></audio>
+      <p id="record-progress" class="note"></p>
+    </section>
   </main>
 </body>
 </html>

@@ -22,7 +22,7 @@ jobs:
       - name: Prepare website
         run: |
           mkdir public
-          cp index.html style.css app.js audio-map.js public/
+          cp index.html style.css app.js audio-map.js sound-catalog.js supabase-config.js recordings.js public/
           cp -r audio public/
       - uses: actions/upload-pages-artifact@v3
         with:

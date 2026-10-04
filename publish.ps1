@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
 Set-Location $PSScriptRoot
-git add -- index.html style.css app.js audio-map.js audio generate-audio.py generate-sheva.py README.md publish.ps1 .github
+git add -- index.html style.css app.js audio-map.js sound-catalog.js supabase-config.js recordings.js supabase tests audio generate-audio.py generate-sheva.py README.md publish.ps1 .github
 if ($LASTEXITCODE -ne 0) { throw 'Could not stage changes.' }
 git diff --cached --quiet
 if ($LASTEXITCODE -eq 1) {

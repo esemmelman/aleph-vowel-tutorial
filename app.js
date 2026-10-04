@@ -86,7 +86,7 @@ function stopSound() {
 function playSound(text) {
   if (!soundEnabled) return;
   stopSound();
-  const source = practiceAudio[text];
+  const source = window.recordedSounds?.[soundByGlyph[text]] || practiceAudio[text];
   if (!source) {
     document.querySelector('#feedback').textContent = 'No audio clip is available for this letter.';
     return;

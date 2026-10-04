@@ -21,4 +21,22 @@ Vowel reference: https://soundsofnikud.com/index_en.html
 
 ## Practice audio
 
+## Recording your own sounds
+
+Open **Record unique sounds** on the site and sign in with your authorized Supabase email and password. Choose a pronunciation, press **Record**, say the complete letter-and-vowel sound, and press **Stop**. Listen to the preview and **Save recording**. **Next missing sound** advances through unfinished recordings. Takes stop automatically after 10 seconds. Microphone recording requires HTTPS or localhost.
+
+The 351 letter/mark combinations share 120 pronunciation recordings: six vowel sounds for twenty consonant sounds (including the vowel-only Alef/Ayin group). This follows modern Israeli pronunciation with the tutorial's short “uh” Sheva; Tsere shares Segol's “eh,” and Saf shares Taf's “t.” Each sound's list shows every combination that will use it. Re-recording replaces the shared sound. Until a recording is saved, practice uses bundled audio.
+
+Recordings live in the `hebrew-sounds` public Storage bucket and `public.hebrew_recordings` in the bnaimitzvah Supabase project. Only accounts listed in `public.hebrew_recorders` may upload or replace sounds. The owner account is authorized. Sessions stay in memory; sign in again after refreshing. The browser configuration contains only a publishable key. The schema and RLS policies are checked into `supabase/migrations`.
+
+To authorize another existing Supabase Auth account, run in the project's SQL editor:
+
+```sql
+insert into public.hebrew_recorders (user_id)
+select id from auth.users where email = 'recorder@example.com'
+on conflict do nothing;
+```
+
+Verify catalog and recording flows with `node --test tests/recordings.test.cjs`.
+
 Bundled MP3 clips all use the Microsoft Hebrew Hila voice. Sheva audio is assembled from Hila recordings rather than synthesized from isolated letters or English spellings. The accepted Bet-with-Sheva recording stays unchanged; its vowel supplies Alef/Ayin and the vowel portion of the other Sheva syllables. Consonant onsets are extracted from the existing Hila vowel recordings, with short crossfades. `generate-sheva.py` builds these clips offline using `numpy` and `imageio-ffmpeg`; source hashes protect the reviewed onset boundaries. `generate-audio.py` also generates missing ordinary Hebrew clips using `edge-tts` and rebuilds `audio-map.js`. Playback itself requires no external speech service.
