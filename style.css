@@ -11,4 +11,7 @@ main{max-width:none;padding:32px 16px 28px}
 .practice{width:100%;max-width:1120px;justify-self:center;container-type:inline-size}
 .letter .glyph{font-size:clamp(32px,7.5cqi,72px)}
 .guide,footer{max-width:1120px;margin-left:auto;margin-right:auto}
+.sound-controls{display:flex;flex-direction:column;align-items:center;gap:6px}.large-option{display:flex;align-items:center;gap:7px;font-size:13px;color:#59675e;cursor:pointer}
+.practice.large .letters{grid-template-columns:repeat(4,minmax(0,1fr))}.practice.large .letter{min-height:180px}.practice.large .letter .glyph{font-size:clamp(48px,12cqi,112px)}.practice.large .special-letters .glyph{font-size:clamp(36px,9cqi,88px)}
+@media(max-width:600px){.practice.large .letters{grid-template-columns:repeat(2,minmax(0,1fr))}.practice.large .letter{min-height:120px}}
 @media(max-width:600px){main{padding:16px 4px 28px}.practice-layout{grid-template-columns:76px minmax(0,1fr);gap:8px}.letter-picker{width:64px;justify-self:end}.letter-picker label{font-size:11px}.letter .glyph{font-size:clamp(24px,8cqi,40px)}}

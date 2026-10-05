@@ -204,6 +204,18 @@ picker.addEventListener('change', e => {
 });
 document.querySelector('#count').value = state.count;
 document.querySelector('#hints').checked = state.hints;
+const largeCheckbox = document.querySelector('#large');
+try { largeCheckbox.checked = localStorage.getItem('hebrew-large') === 'on'; } catch {}
+function applyLarge() {
+  const practice = document.querySelector('.practice');
+  if (largeCheckbox.checked) practice.classList.add('large');
+  else practice.classList.remove('large');
+}
+applyLarge();
+largeCheckbox.addEventListener('change', () => {
+  applyLarge();
+  try { localStorage.setItem('hebrew-large', largeCheckbox.checked ? 'on' : 'off'); } catch {}
+});
 const soundCheckbox = document.querySelector('#sound');
 soundCheckbox.checked = soundEnabled;
 soundCheckbox.addEventListener('change', e => {
