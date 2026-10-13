@@ -113,8 +113,15 @@ test('picker renders special tiles, plays their recordings, and returns to ordin
   assert.equal(displayedMarks().includes('\u25cc\u05b8'),true);
   assert.equal([0,1,2].flatMap(i => get(`#row-${i}`).children).some(tile => tile.children[1].textContent === 'Kamatz'),true);
   assert.equal(get('#count').disabled,true);
+  const orderedMarks = displayedMarks();
+  assert.deepEqual(orderedMarks.slice(-4),['\u25cc\u05b1','\u25cc\u05b3','\u25cc\u05b2','\u25cc\u05bb']);
   get('#shuffle').listeners.click();
-  assert.equal(new Set(displayedMarks()).size,13);
+  assert.deepEqual(displayedMarks(),orderedMarks);
+  vm.runInContext('shuffle(2)',ctx);
+  assert.deepEqual(displayedMarks(),orderedMarks);
+  get('#consonant').listeners.change({target:{value:'0'}});
+  get('#consonant').listeners.change({target:{value:'-1'}});
+  assert.deepEqual(displayedMarks(),orderedMarks);
   for (let index = 27; index < 33; index++) {
     get('#consonant').listeners.change({target:{value:String(index)}});
     assert.equal(get('#row-0').children.length,index === 27 ? 1 : 4);

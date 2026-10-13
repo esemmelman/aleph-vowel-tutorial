@@ -43,6 +43,7 @@ recordingOnlyItems.push(...specialEntries[1].items.splice(2, 2,
 ));
 const pickerEntries = [...consonants, ...specialEntries];
 const allVowels = vowels.map((_, i) => i);
+const nikudOrder = [0, 1, 2, 3, 5, 6, 7, 8, 12, 10, 11, 9, 4];
 const alefGroups = [[0, 1, 2], [3, 4], allVowels.filter(i => i >= 5)];
 const alefHeadings = ['Patach · Kamatz · Chirik', 'Tzairai · Kubutz', 'Remaining vowel signs'];
 const compoundVowels = [9, 10, 11];
@@ -179,7 +180,7 @@ function render() {
 }
 function freshRows() {
   if (state.consonant === -1) {
-    const marks = shuffled(allVowels);
+    const marks = nikudOrder;
     return [marks.slice(0, 5), marks.slice(5, 9), marks.slice(9)];
   }
   if (state.consonant === 0) return alefGroups.map(group => randomRow(group));
@@ -189,7 +190,7 @@ function freshRows() {
 }
 function shuffle(line) {
   if (line === undefined) state.rows = freshRows();
-  else if (state.consonant === -1) state.rows[line] = shuffled(state.rows[line]);
+  else if (state.consonant === -1) state.rows = freshRows();
   else state.rows[line] = randomRow(state.consonant === 0 ? alefGroups[line] : allVowels);
   document.querySelector('#feedback').textContent = 'Fresh practice ready. Start at the right of each line.';
   render();
