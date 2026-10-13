@@ -52,9 +52,9 @@ try {
   const saved = JSON.parse(localStorage.getItem(key));
   if (saved && (saved.consonant === 33 || saved.consonant === 34)) saved.consonant = 28;
   if (saved && [6,8,12,18].includes(saved.count) && typeof saved.hints === 'boolean' &&
-      Number.isInteger(saved.consonant) && pickerEntries[saved.consonant] &&
+      Number.isInteger(saved.consonant) && (saved.consonant === -1 || pickerEntries[saved.consonant]) &&
       Array.isArray(saved.rows) && saved.rows.length === 3 && saved.rows.every(row =>
-        Array.isArray(row) && row.length === saved.count && row.every(v => allVowels.includes(v)))) {
+        Array.isArray(row) && (saved.consonant === -1 || row.length === saved.count) && row.every(v => allVowels.includes(v)))) {
     state = saved;
   }
 } catch { /* Storage may be unavailable; practice still works. */ }
@@ -119,8 +119,9 @@ function playSound(text) {
   });
 }
 function render() {
+  const nikud = state.consonant === -1;
   const special = specialEntries[state.consonant - consonants.length];
-  document.querySelector('#count').disabled = !!special;
+  document.querySelector('#count').disabled = !!special || nikud;
   document.querySelectorAll('.line').forEach((line, i) => { line.hidden = !!special && i > 0; });
   if (special) {
     const heading = document.querySelector('.line-heading h3');
@@ -156,9 +157,9 @@ function render() {
       const v = vowels[index];
       const button = document.createElement('button');
       button.className = 'letter';
-      button.setAttribute('aria-label', `${consonants[state.consonant].name} with ${v.name}. Select to reveal the sound.`);
+      button.setAttribute('aria-label', nikud ? `${v.name}. Select to reveal the sound.` : `${consonants[state.consonant].name} with ${v.name}. Select to reveal the sound.`);
       const glyph = document.createElement('span');
-      glyph.className = 'glyph'; glyph.textContent = consonants[state.consonant].glyph + v.mark;
+      glyph.className = 'glyph'; glyph.textContent = nikud ? (v.mark.startsWith('ו') ? v.mark : '\u25cc' + v.mark) : consonants[state.consonant].glyph + v.mark;
       button.append(glyph);
       if (state.hints) {
         const hint = document.createElement('span'); hint.className = 'hint';
@@ -168,7 +169,7 @@ function render() {
         document.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
         button.classList.add('selected');
         document.querySelector('#feedback').textContent = `${v.name}: “${v.sound}” — ${v.example}.`;
-        playSound(glyph.textContent);
+        playSound(nikud ? consonants[0].glyph + v.mark : glyph.textContent);
       });
       container.append(button);
     });
@@ -176,6 +177,10 @@ function render() {
   save();
 }
 function freshRows() {
+  if (state.consonant === -1) {
+    const marks = shuffled(allVowels);
+    return [marks.slice(0, 5), marks.slice(5, 9), marks.slice(9)];
+  }
   if (state.consonant === 0) return alefGroups.map(group => randomRow(group));
   // Reduce paired marks to half their previous share, rounded to whole tiles.
   const dealt = randomRow(allVowels, state.count * 3);
@@ -183,11 +188,17 @@ function freshRows() {
 }
 function shuffle(line) {
   if (line === undefined) state.rows = freshRows();
+  else if (state.consonant === -1) state.rows[line] = shuffled(state.rows[line]);
   else state.rows[line] = randomRow(state.consonant === 0 ? alefGroups[line] : allVowels);
   document.querySelector('#feedback').textContent = 'Fresh practice ready. Start at the right of each line.';
   render();
 }
 const picker = document.querySelector('#consonant');
+const nikudOption = document.createElement('option');
+nikudOption.value = -1;
+nikudOption.textContent = 'ניקוד';
+nikudOption.setAttribute('aria-label', 'Nikud — all vowel signs');
+picker.append(nikudOption);
 pickerEntries.forEach((letter, i) => {
   const option = document.createElement('option');
   option.value = i;
@@ -242,6 +253,6 @@ vowels.forEach(v => {
   const sound = document.createElement('p'); sound.textContent = `“${v.sound}” · ${v.example}`;
   card.append(glyph,name,sound); document.querySelector('#vowel-guide').append(card);
 });
-if (!state.rows.length || (state.consonant === 0 && state.rows.some((row, i) =>
+if (state.consonant === -1 || !state.rows.length || (state.consonant === 0 && state.rows.some((row, i) =>
   row.some(v => !alefGroups[i].includes(v))))) state.rows = freshRows();
 render();

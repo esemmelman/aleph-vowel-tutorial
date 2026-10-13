@@ -103,7 +103,16 @@ test('picker renders special tiles, plays their recordings, and returns to ordin
   });
   vm.runInContext(app,ctx);
   vm.runInContext(fs.readFileSync('sound-catalog.js','utf8'),ctx);
-  assert.equal(get('#consonant').children.length,33);
+  assert.equal(get('#consonant').children.length,34);
+  assert.equal(get('#consonant').children[0].textContent,'ניקוד');
+  get('#consonant').listeners.change({target:{value:'-1'}});
+  const displayedMarks = () => [0,1,2].flatMap(i => get(`#row-${i}`).children.map(tile => tile.children[0].textContent));
+  assert.equal(displayedMarks().length,13);
+  assert.equal(new Set(displayedMarks()).size,13);
+  assert.equal(displayedMarks().every(mark => !mark.includes('א')),true);
+  assert.equal(get('#count').disabled,true);
+  get('#shuffle').listeners.click();
+  assert.equal(new Set(displayedMarks()).size,13);
   for (let index = 27; index < 33; index++) {
     get('#consonant').listeners.change({target:{value:String(index)}});
     assert.equal(get('#row-0').children.length,index === 27 ? 1 : 4);
