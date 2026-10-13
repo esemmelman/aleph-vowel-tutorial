@@ -89,7 +89,7 @@ test('special entries have one Alef Patach Yod and four distinct combinations pe
 test('picker renders special tiles, plays their recordings, and returns to ordinary practice', () => {
   const elements = {}, played = [];
   function node() {
-    return {children: [], listeners: {}, classList: {add(){},remove(){}},
+    return {children: [], listeners: {}, classList: {add(){},remove(){},toggle(){}},
       append(...items){this.children.push(...items);}, replaceChildren(...items){this.children = items;},
       setAttribute(){}, addEventListener(type, fn){this.listeners[type] = fn;}, querySelector(){return node();}};
   }
@@ -110,6 +110,8 @@ test('picker renders special tiles, plays their recordings, and returns to ordin
   assert.equal(displayedMarks().length,13);
   assert.equal(new Set(displayedMarks()).size,13);
   assert.equal(displayedMarks().every(mark => !mark.includes('א')),true);
+  assert.equal(displayedMarks().includes('\u25cc\u05b8'),true);
+  assert.equal([0,1,2].flatMap(i => get(`#row-${i}`).children).some(tile => tile.children[1].textContent === 'Kamatz'),true);
   assert.equal(get('#count').disabled,true);
   get('#shuffle').listeners.click();
   assert.equal(new Set(displayedMarks()).size,13);

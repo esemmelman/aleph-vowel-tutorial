@@ -120,6 +120,7 @@ function playSound(text) {
 }
 function render() {
   const nikud = state.consonant === -1;
+  document.querySelector('.practice').classList.toggle('nikud', nikud);
   const special = specialEntries[state.consonant - consonants.length];
   document.querySelector('#count').disabled = !!special || nikud;
   document.querySelectorAll('.line').forEach((line, i) => { line.hidden = !!special && i > 0; });
@@ -161,7 +162,7 @@ function render() {
       const glyph = document.createElement('span');
       glyph.className = 'glyph'; glyph.textContent = nikud ? (v.mark.startsWith('ו') ? v.mark : '\u25cc' + v.mark) : consonants[state.consonant].glyph + v.mark;
       button.append(glyph);
-      if (state.hints) {
+      if (state.hints || nikud) {
         const hint = document.createElement('span'); hint.className = 'hint';
         hint.dir = 'ltr'; hint.lang = 'en'; hint.textContent = v.name; button.append(hint);
       }
