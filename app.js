@@ -43,7 +43,7 @@ recordingOnlyItems.push(...specialEntries[1].items.splice(2, 2,
 ));
 const pickerEntries = [...consonants, ...specialEntries];
 const allVowels = vowels.map((_, i) => i);
-const nikudOrder = [0, 1, 2, 3, 5, 6, 7, 8, 12, 10, 11, 9, 4];
+const nikudOrder = [0, 1, 2, 3, 5, 6, 7, 8, 12, 4, 11, 9, 10];
 const alefGroups = [[0, 1, 2], [3, 4], allVowels.filter(i => i >= 5)];
 const alefHeadings = ['Patach · Kamatz · Chirik', 'Tzairai · Kubutz', 'Remaining vowel signs'];
 const compoundVowels = [9, 10, 11];

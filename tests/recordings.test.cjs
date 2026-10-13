@@ -114,7 +114,7 @@ test('picker renders special tiles, plays their recordings, and returns to ordin
   assert.equal([0,1,2].flatMap(i => get(`#row-${i}`).children).some(tile => tile.children[1].textContent === 'Kamatz'),true);
   assert.equal(get('#count').disabled,true);
   const orderedMarks = displayedMarks();
-  assert.deepEqual(orderedMarks.slice(-4),['\u25cc\u05b1','\u25cc\u05b3','\u25cc\u05b2','\u25cc\u05bb']);
+  assert.deepEqual(orderedMarks.slice(-4),['\u25cc\u05bb','\u25cc\u05b3','\u25cc\u05b2','\u25cc\u05b1']);
   get('#shuffle').listeners.click();
   assert.deepEqual(displayedMarks(),orderedMarks);
   vm.runInContext('shuffle(2)',ctx);
